@@ -1,3 +1,5 @@
+use std::iter::{self, from_fn};
+
 #[derive(Debug, PartialEq)]
 pub enum Token {
     Keyword(Keyword),
@@ -73,6 +75,36 @@ impl Op {
 
 pub struct Lexer {
     input: String,
+}
+
+impl Lexer {
+    pub fn tokenize(&self) -> Result<Vec<Token>, LexerError> {
+        let mut tokens: Vec<Token> = vec![];
+        let mut iter = self.input.chars().peekable();
+
+        while let Some(ch) = iter.next() {
+            match ch {
+                ' ' | '\t' | '\n' => continue, // Skip whitespace
+                '"' => {
+                    let value = iter::once(ch)
+                        .chain(from_fn(|| {
+                            iter.by_ref().next_if(|s| {
+                                if s == &'"' {
+                                    return false;
+                                }
+
+                                true
+                            })
+                        }))
+                        .collect::<String>();
+                    tokens.push(Token::Literal(value));
+                }
+                _ => return Err(LexerError::UnrecognizedToken),
+            }
+        }
+
+        Ok(tokens)
+    }
 }
 
 #[derive(Debug)]
