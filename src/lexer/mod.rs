@@ -130,6 +130,21 @@ impl Lexer {
                         .map_err(|_| LexerError::InvalidNumberFormat)?;
                     tokens.push(Token::Number(n));
                 }
+                'a'..='z' | 'A'..='Z' | '_' => {
+                    let word = iter::once(ch)
+                        .chain(from_fn(|| {
+                            iter.by_ref()
+                                .next_if(|s| s.is_ascii_alphanumeric() || *s == '_')
+                        }))
+                        .collect::<String>();
+                    tokens.push(match word.to_lowercase().as_str() {
+                        "select" => Token::Keyword(Select),
+                        "and" => Token::Operator(And),
+                        "or" => Token::Operator(Or),
+                        "not" => Token::Operator(Not),
+                        _ => Token::Literal(word),
+                    });
+                }
                 _ => return Err(LexerError::UnrecognizedToken),
             }
         }
