@@ -108,6 +108,12 @@ impl Lexer {
                         .collect::<String>();
                     tokens.push(Token::Literal(value));
                 }
+                '0'..='9' => {
+                    let num_str: String = iter::once(ch)
+                        .chain(from_fn(|| iter.by_ref().next_if(|s| s.is_ascii_digit())))
+                        .collect();
+                    tokens.push(Token::Literal(num_str));
+                }
                 _ => return Err(LexerError::UnrecognizedToken),
             }
         }
