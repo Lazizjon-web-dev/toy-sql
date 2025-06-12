@@ -88,9 +88,18 @@ impl Lexer {
                 '"' => {
                     let value = iter::once(ch)
                         .chain(from_fn(|| {
+                            let mut is_escaped = false;
                             iter.by_ref().next_if(|s| {
+                                if s == &'\\' {
+                                    is_escaped = true;
+                                }
+
                                 if s == &'"' {
-                                    return false;
+                                    if is_escaped {
+                                        is_escaped = false;
+                                    } else {
+                                        return false;
+                                    }
                                 }
 
                                 true
