@@ -79,6 +79,12 @@ pub struct Lexer {
 }
 
 impl Lexer {
+    pub fn new(input: &str) -> Self {
+        Self {
+            input: input.to_string(),
+        }
+    }
+
     pub fn tokenize(&self) -> Result<Vec<Token>, LexerError> {
         let mut tokens: Vec<Token> = vec![];
         let mut iter = self.input.chars().peekable();
