@@ -22,19 +22,54 @@ pub enum Op {
     Or,
     Not,
     // Arithmetic Operators
-    Addition,
-    Substraction,
-    Multiplication,
-    Division,
+    Add, // Addition
+    Sub, // Substraction,
+    Mul, // Multiplication,
+    Div, // Division,
     // Comparison Operators
-    Equal,
-    NotEqual,
-    LessThan,
-    GreaterThan,
-    LessThanOrEqual,
-    GreaterThanOrEqual,
+    Eq,  // Equal,
+    Neq, // NotEqual,
+    Lt,  // LessThan,
+    Gt,  // GreaterThan,
+    Lte, // LessThanOrEqual,
+    Gte, // GreaterThanOrEqual,
+    // Punctuation
+    Comma,
+    LParen, // LeftParenthesis,
+    RParen, // RightParenthesis,
+    Colon,
 }
 use Op::*;
+
+impl Op {
+    pub fn from_char(c: char) -> Option<Self> {
+        match c {
+            '+' => Some(Self::Add),
+            '-' => Some(Self::Sub),
+            '*' => Some(Self::Mul),
+            '/' => Some(Self::Div),
+            '=' => Some(Self::Eq),
+            ',' => Some(Self::Comma),
+            '(' => Some(Self::LParen),
+            ')' => Some(Self::RParen),
+            ':' => Some(Self::Colon),
+            _ => None,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Option<Self> {
+        match s {
+            "!=" => Some(Op::Neq),
+            "<>" => Some(Op::Neq),
+            "<=" => Some(Op::Lte),
+            ">=" => Some(Op::Gte),
+            "<" => Some(Op::Lt),
+            ">" => Some(Op::Gt),
+            "!" => Some(Op::Not),
+            _ => None,
+        }
+    }
+}
 
 pub struct Lexer {
     input: String,
