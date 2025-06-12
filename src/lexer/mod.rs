@@ -145,6 +145,13 @@ impl Lexer {
                         _ => Token::Literal(word),
                     });
                 }
+                '#' => {
+                    tokens.push(Token::Comment(
+                        iter::once(ch)
+                            .chain(from_fn(|| iter.by_ref().next_if(|s| *s != '\n')))
+                            .collect(),
+                    ));
+                }
                 _ => return Err(LexerError::UnrecognizedToken),
             }
         }
