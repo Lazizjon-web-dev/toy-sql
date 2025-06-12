@@ -109,8 +109,20 @@ impl Lexer {
                     tokens.push(Token::Literal(value));
                 }
                 '0'..='9' => {
+                    let mut is_float = false;
                     let num_str: String = iter::once(ch)
-                        .chain(from_fn(|| iter.by_ref().next_if(|s| s.is_ascii_digit())))
+                        .chain(from_fn(|| {
+                            iter.by_ref().next_if(|s| {
+                                if s.is_ascii_digit() {
+                                    true
+                                } else if *s == '.' && !is_float {
+                                    is_float = true;
+                                    true
+                                } else {
+                                    false
+                                }
+                            })
+                        }))
                         .collect();
                     tokens.push(Token::Literal(num_str));
                 }
