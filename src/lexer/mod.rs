@@ -74,3 +74,9 @@ impl Op {
 pub struct Lexer {
     input: String,
 }
+
+#[derive(Debug)]
+pub enum LexerError {
+    UnrecognizedToken,
+    InvalidNumberFormat,
+}
