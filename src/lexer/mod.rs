@@ -7,6 +7,7 @@ pub enum Token {
     Identifier(String),
     Literal(String),
     Comment(String),
+    Number(f64),
 }
 
 #[derive(Debug, PartialEq)]
@@ -124,7 +125,10 @@ impl Lexer {
                             })
                         }))
                         .collect();
-                    tokens.push(Token::Literal(num_str));
+                    let n: f64 = num_str
+                        .parse()
+                        .map_err(|_| LexerError::InvalidNumberFormat)?;
+                    tokens.push(Token::Number(n));
                 }
                 _ => return Err(LexerError::UnrecognizedToken),
             }
