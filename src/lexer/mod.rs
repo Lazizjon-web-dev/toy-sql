@@ -1,11 +1,20 @@
 #[derive(Debug, PartialEq)]
 pub enum Token {
-    Keyword(String),
+    Keyword(Keyword),
     Operator(Op),
     Identifier(String),
     Literal(String),
     Comment(String),
 }
+
+#[derive(Debug, PartialEq)]
+pub enum Keyword {
+    Select,
+    Insert,
+    Delete,
+}
+use Keyword::*;
+
 #[derive(Debug, PartialEq)]
 pub enum Op {
     // Logical Operators
