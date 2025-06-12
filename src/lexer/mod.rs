@@ -152,6 +152,22 @@ impl Lexer {
                             .collect(),
                     ));
                 }
+                '+' | '-' | '*' | '/' | ':' | '=' | ',' | '(' | ')' => {
+                    tokens.push(Token::Operator(
+                        Op::from_char(ch).ok_or(LexerError::UnrecognizedToken)?,
+                    ));
+                }
+                '!' | '<' | '>' => {
+                    let mut operator = String::from(ch);
+                    if let Some(&next_ch) = iter.peek()
+                        && (next_ch == '=' || (ch == '<' && next_ch == '>'))
+                    {
+                        operator.push(iter.next().unwrap());
+                    }
+                    tokens.push(Token::Operator(
+                        Op::from_str(&operator).ok_or(LexerError::UnrecognizedToken)?,
+                    ));
+                }
                 _ => return Err(LexerError::UnrecognizedToken),
             }
         }
