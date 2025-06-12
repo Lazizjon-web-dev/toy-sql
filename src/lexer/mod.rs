@@ -1,13 +1,31 @@
 #[derive(Debug, PartialEq)]
 pub enum Token {
-    Identifier(String),
     Keyword(String),
+    Operator(Op),
+    Identifier(String),
     Literal(String),
-    Operator(String),
-    Punctuation(String),
     Comment(String),
-    Whitespace(String),
 }
+#[derive(Debug, PartialEq)]
+pub enum Op {
+    // Logical Operators
+    And,
+    Or,
+    Not,
+    // Arithmetic Operators
+    Addition,
+    Substraction,
+    Multiplication,
+    Division,
+    // Comparison Operators
+    Equal,
+    NotEqual,
+    LessThan,
+    GreaterThan,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
+}
+use Op::*;
 
 pub struct Lexer {
     input: String,
